@@ -101,14 +101,6 @@ def main():
     if not check_password():
         return
 
-    # Navigation header
-    _, col_btn = st.columns([2, 1])
-    with col_btn:
-        st.markdown(
-            '<a href="http://localhost:8503" target="_self" style="display:inline-block;padding:0.5rem 1rem;background:#f0f2f6;border:1px solid #ddd;border-radius:0.5rem;text-decoration:none;color:#31333F;font-size:0.9rem;">📋 Stocktake Wizard</a>',
-            unsafe_allow_html=True
-        )
-
     st.title("🏠 Gutter Guard Warehouse")
     st.subheader("Inventory Dashboard")
 

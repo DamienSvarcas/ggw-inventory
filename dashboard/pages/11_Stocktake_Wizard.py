@@ -1,21 +1,19 @@
 """
-Stocktake Wizard - Main Application
+Stocktake Wizard Page
 A step-by-step wizard for entering inventory counts.
 Supports 7 categories with auto-push to inventory on section completion.
 """
 
 import streamlit as st
-from item_generator import generate_all_items, get_category_counts, CATEGORY_NAMES
-from wizard_state import WizardState
-from inventory_updater import apply_category_stocktake, apply_stocktake, list_backups
+import sys
+import os
 
-# Page config
-st.set_page_config(
-    page_title="Stocktake Wizard - GGW",
-    page_icon="📋",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
+# Add parent directories to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from stocktake_wizard.item_generator import generate_all_items, get_category_counts, CATEGORY_NAMES
+from stocktake_wizard.wizard_state import WizardState
+from stocktake_wizard.inventory_updater import apply_category_stocktake
 
 # Custom CSS for clean appearance
 st.markdown("""
@@ -82,10 +80,6 @@ st.markdown("""
         margin-top: 1rem;
     }
 
-    /* Hide streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-
     /* Button styling */
     .stButton > button {
         width: 100%;
@@ -142,7 +136,7 @@ def init_session_state():
 
 def render_welcome_screen():
     """Render the welcome/start screen."""
-    st.title("📋 Stocktake Wizard")
+    st.title("Stocktake Wizard")
     st.markdown("### Gutter Guard Warehouse")
 
     st.markdown("---")
@@ -212,10 +206,6 @@ def render_category_selection():
 
     counts = get_category_counts()
 
-    # All 7 categories
-    all_categories = ['screws', 'trims', 'corrugated_saddles', 'trimdek_saddles',
-                      'boxes', 'mesh_4mm', 'mesh_2mm']
-
     categories = []
 
     # Create checkboxes for each category
@@ -247,11 +237,11 @@ def render_category_selection():
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Back", use_container_width=True):
+        if st.button("Back", use_container_width=True):
             st.session_state.screen = 'welcome'
             st.rerun()
     with col2:
-        if st.button("Begin Counting →", type="primary", use_container_width=True, disabled=not categories):
+        if st.button("Begin Counting", type="primary", use_container_width=True, disabled=not categories):
             # Initialize wizard state with selected categories
             items = generate_all_items(categories)
             state = WizardState()
@@ -266,7 +256,7 @@ def render_category_selection():
 
 def render_category_select_screen():
     """Render category selection screen for manual changes."""
-    st.title("📋 Select Category")
+    st.title("Select Category")
     st.markdown("Choose a category to count or update.")
 
     state: WizardState = st.session_state.wizard_state
@@ -291,17 +281,13 @@ def render_category_select_screen():
 
         # Status indicator
         if is_pushed:
-            status = "✅ Pushed to inventory"
-            card_class = "completed"
+            status = "Pushed to inventory"
         elif is_complete:
-            status = "⏳ Ready to push"
-            card_class = "completed"
+            status = "Ready to push"
         elif info['completed'] > 0:
             status = f"{info['completed']}/{info['total']} entered"
-            card_class = "in-progress"
         else:
             status = "Not started"
-            card_class = ""
 
         # Category card
         col1, col2 = st.columns([3, 1])
@@ -310,9 +296,9 @@ def render_category_select_screen():
             st.caption(status)
         with col2:
             if is_pushed:
-                st.button("✓ Done", key=f"btn_{cat}", disabled=True, use_container_width=True)
+                st.button("Done", key=f"btn_{cat}", disabled=True, use_container_width=True)
             else:
-                if st.button("Count →" if not is_complete else "Review →",
+                if st.button("Count" if not is_complete else "Review",
                              key=f"btn_{cat}", use_container_width=True):
                     st.session_state.current_category = cat
                     st.session_state.screen = 'entry'
@@ -324,7 +310,7 @@ def render_category_select_screen():
             summary = state.get_summary()
             cat_entries = [e for e in summary if e['category'] == cat]
 
-            with st.expander(f"📋 Review {len(cat_entries)} items", expanded=True):
+            with st.expander(f"Review {len(cat_entries)} items", expanded=True):
                 non_zero = [e for e in cat_entries if (e.get('quantity') or 0) > 0]
                 zero_count = len(cat_entries) - len(non_zero)
 
@@ -340,7 +326,7 @@ def render_category_select_screen():
                         elif cat == 'boxes':
                             st.markdown(f"- **{entry['type_name']}**: {qty} boxes")
                         elif cat in ['mesh_4mm', 'mesh_2mm']:
-                            st.markdown(f"- **{entry['colour']}** {entry['width_mm']}mm × {entry['length_m']}m: {qty} rolls")
+                            st.markdown(f"- **{entry['colour']}** {entry['width_mm']}mm x {entry['length_m']}m: {qty} rolls")
                         else:
                             st.markdown(f"- **{entry.get('colour', 'Item')}**: {qty}")
 
@@ -369,7 +355,7 @@ def render_category_select_screen():
 
                 st.session_state.pushed_categories.add(cat)
                 st.session_state.push_results[cat] = result
-                st.success(f"✅ {cat_name} inventory updated!")
+                st.success(f"{cat_name} inventory updated!")
                 st.rerun()
 
         st.markdown("---")
@@ -381,7 +367,7 @@ def render_category_select_screen():
 
     # All done?
     if pushed_cats == total_cats:
-        st.success("🎉 All categories have been pushed to inventory!")
+        st.success("All categories have been pushed to inventory!")
         st.balloons()
 
         if st.button("Start New Stocktake", type="primary", use_container_width=True):
@@ -395,7 +381,7 @@ def render_category_select_screen():
 
     # Save progress button
     st.markdown("---")
-    if st.button("💾 Save Progress", use_container_width=True):
+    if st.button("Save Progress", use_container_width=True):
         state.save_progress()
         st.success("Progress saved!")
 
@@ -416,7 +402,6 @@ def render_entry_screen():
 
     # Find current item in this category
     cat_progress = state.get_category_progress()
-    cat_info = cat_progress.get(current_cat, {})
 
     # Find first incomplete item in this category, or start from beginning
     current_cat_index = 0
@@ -482,12 +467,12 @@ def render_entry_screen():
 
         input_mode = st.radio(
             "Enter as:",
-            ["Individual screws", "Boxes (×1000)"],
+            ["Individual screws", "Boxes (x1000)"],
             horizontal=True,
             label_visibility="collapsed"
         )
 
-        if input_mode == "Boxes (×1000)":
+        if input_mode == "Boxes (x1000)":
             boxes = st.number_input(
                 "Number of boxes",
                 min_value=0,
@@ -555,7 +540,7 @@ def render_entry_screen():
         pack_size = item.get('pack_size', 1)
         input_mode = st.radio(
             "Enter as:",
-            ["Individual boxes", f"Packs (×{pack_size})"],
+            ["Individual boxes", f"Packs (x{pack_size})"],
             horizontal=True,
             label_visibility="collapsed"
         )
@@ -582,7 +567,7 @@ def render_entry_screen():
     elif current_cat in ['mesh_4mm', 'mesh_2mm']:
         st.markdown(f"### {item['type_name']}")
         st.markdown(f"**Colour:** {item['colour']}")
-        st.markdown(f"**Size:** {item['width_mm']}mm × {item['length_m']}m")
+        st.markdown(f"**Size:** {item['width_mm']}mm x {item['length_m']}m")
 
         st.markdown("---")
         st.markdown("#### How many rolls in stock?")
@@ -622,7 +607,7 @@ def render_entry_screen():
 
     with col1:
         if cat_index > 0:
-            if st.button("← Previous", use_container_width=True):
+            if st.button("Previous", use_container_width=True):
                 st.session_state.cat_item_index -= 1
                 st.rerun()
 
@@ -637,7 +622,7 @@ def render_entry_screen():
             st.rerun()
 
     with col3:
-        if st.button("Next →", type="primary", use_container_width=True):
+        if st.button("Next", type="primary", use_container_width=True):
             state.set_quantity(item['id'], quantity)
             if cat_index < len(cat_items) - 1:
                 st.session_state.cat_item_index += 1
@@ -650,11 +635,11 @@ def render_entry_screen():
     st.markdown("---")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Back to Categories", use_container_width=True):
+        if st.button("Back to Categories", use_container_width=True):
             st.session_state.screen = 'category_select'
             st.rerun()
     with col2:
-        if st.button("💾 Save Progress", use_container_width=True):
+        if st.button("Save Progress", use_container_width=True):
             state.save_progress()
             st.success("Progress saved!")
 
@@ -669,25 +654,20 @@ def check_category_complete(state: WizardState, category: str, cat_items: list):
         st.session_state.screen = 'category_select'
 
 
-def main():
-    """Main application entry point."""
-    init_session_state()
+# Main entry point
+init_session_state()
 
-    # Route to appropriate screen
-    screen = st.session_state.screen
+# Route to appropriate screen
+screen = st.session_state.screen
 
-    if screen == 'welcome':
-        render_welcome_screen()
-    elif screen == 'categories':
-        render_category_selection()
-    elif screen == 'category_select':
-        render_category_select_screen()
-    elif screen == 'entry':
-        render_entry_screen()
-    else:
-        st.session_state.screen = 'welcome'
-        st.rerun()
-
-
-if __name__ == "__main__":
-    main()
+if screen == 'welcome':
+    render_welcome_screen()
+elif screen == 'categories':
+    render_category_selection()
+elif screen == 'category_select':
+    render_category_select_screen()
+elif screen == 'entry':
+    render_entry_screen()
+else:
+    st.session_state.screen = 'welcome'
+    st.rerun()
