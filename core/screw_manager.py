@@ -67,7 +67,7 @@ class ScrewManager:
         """
         # Find existing entry or create new
         for entry in self.data["inventory"]:
-            if entry["screw_type"] == screw_type and entry["colour"] == colour:
+            if entry.get("screw_type", "screws") == screw_type and entry.get("colour") == colour:
                 entry["quantity"] += quantity
                 entry["last_updated"] = datetime.utcnow().isoformat() + "Z"
                 self._save_data()
@@ -109,7 +109,7 @@ class ScrewManager:
             True if successful, False if insufficient stock
         """
         for entry in self.data["inventory"]:
-            if entry["screw_type"] == screw_type and entry["colour"] == colour:
+            if entry.get("screw_type", "screws") == screw_type and entry.get("colour") == colour:
                 if entry["quantity"] < quantity:
                     return False
 
@@ -154,10 +154,10 @@ class ScrewManager:
         """Get summarized stock by screw type and colour."""
         summary = []
         for entry in self.data["inventory"]:
-            if entry["quantity"] > 0:
+            if entry.get("quantity", 0) > 0:
                 summary.append({
-                    "screw_type": entry["screw_type"],
-                    "colour": entry["colour"],
+                    "screw_type": entry.get("screw_type", "screws"),
+                    "colour": entry.get("colour", "Unknown"),
                     "quantity": entry["quantity"],
                     "boxes": entry["quantity"] // self.config["pack_size"]
                 })
@@ -166,7 +166,7 @@ class ScrewManager:
     def get_stock_by_type_and_colour(self, screw_type: str, colour: str) -> int:
         """Get quantity for a specific screw type and colour."""
         for entry in self.data["inventory"]:
-            if entry["screw_type"] == screw_type and entry["colour"] == colour:
+            if entry.get("screw_type", "screws") == screw_type and entry.get("colour") == colour:
                 return entry["quantity"]
         return 0
 
