@@ -81,6 +81,7 @@ def update_screw_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
 
         new_inventory.append({
             "id": generate_id(),
+            "screw_type": "screws",
             "colour": entry["colour"],
             "quantity": entry["quantity"],
             "unit": "screws",

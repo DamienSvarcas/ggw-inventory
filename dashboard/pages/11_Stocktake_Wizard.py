@@ -197,6 +197,23 @@ def render_welcome_screen():
             st.rerun()
 
 
+@st.dialog("Confirm Stocktake")
+def confirm_stocktake_dialog():
+    """Show confirmation dialog before starting stocktake."""
+    st.warning("**Warning:** This stocktake will replace all existing stock levels for the selected categories.")
+    st.markdown("Any current inventory data will be overwritten with the new counts you enter.")
+    st.markdown("---")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Cancel", use_container_width=True):
+            st.rerun()
+    with col2:
+        if st.button("I Understand, Continue", type="primary", use_container_width=True):
+            st.session_state.confirmed_stocktake = True
+            st.rerun()
+
+
 def render_category_selection():
     """Render category selection screen."""
     st.title("Select Categories")
@@ -235,6 +252,22 @@ def render_category_selection():
 
     st.markdown("---")
 
+    # Check if user confirmed the stocktake
+    if st.session_state.get('confirmed_stocktake') and st.session_state.get('pending_categories'):
+        # User confirmed - proceed with stocktake
+        categories_to_use = st.session_state.pending_categories
+        items = generate_all_items(categories_to_use)
+        state = WizardState()
+        state.initialize(items, categories_to_use)
+        st.session_state.wizard_state = state
+        st.session_state.selected_categories = categories_to_use
+        st.session_state.completed_categories = set()
+        st.session_state.pushed_categories = set()
+        st.session_state.confirmed_stocktake = False
+        st.session_state.pending_categories = None
+        st.session_state.screen = 'category_select'
+        st.rerun()
+
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Back", use_container_width=True):
@@ -242,16 +275,9 @@ def render_category_selection():
             st.rerun()
     with col2:
         if st.button("Begin Counting", type="primary", use_container_width=True, disabled=not categories):
-            # Initialize wizard state with selected categories
-            items = generate_all_items(categories)
-            state = WizardState()
-            state.initialize(items, categories)
-            st.session_state.wizard_state = state
-            st.session_state.selected_categories = categories
-            st.session_state.completed_categories = set()
-            st.session_state.pushed_categories = set()
-            st.session_state.screen = 'category_select'
-            st.rerun()
+            # Store categories and show confirmation dialog
+            st.session_state.pending_categories = categories
+            confirm_stocktake_dialog()
 
 
 def render_category_select_screen():
