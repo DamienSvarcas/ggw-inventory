@@ -1,0 +1,21 @@
+{
+  "box_types": {
+    "small_tube": {
+      "name": "Small Tube",
+      "description": "For orders up to 25m",
+      "pack_size": 50
+    },
+    "large_tube": {
+      "name": "Large Tube",
+      "description": "For orders over 25m",
+      "pack_size": 20
+    },
+    "saddle_box": {
+      "name": "Saddle Box",
+      "description": "For saddle orders",
+      "pack_size": 70
+    }
+  },
+  "supplier": "Wendy (Box Supplier)",
+  "notes": "Boxes ordered from Wendy in packs"
+}

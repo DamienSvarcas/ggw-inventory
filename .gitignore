@@ -1,0 +1,28 @@
+# Environment variables (contains passwords)
+.env
+
+# Streamlit secrets (local only)
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups (optional - remove if you want to track backups)
+stocktake_wizard/backups/

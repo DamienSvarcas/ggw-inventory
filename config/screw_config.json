@@ -1,0 +1,40 @@
+{
+  "screw_types": {
+    "screws": {
+      "name": "Screws",
+      "description": "Colorbond screws for saddles, trims, and mesh attachment",
+      "box_size": 1000
+    }
+  },
+  "colours": [
+    "Monument",
+    "Woodland Grey",
+    "Basalt",
+    "Pale Eucalypt",
+    "Wilderness",
+    "Ironstone",
+    "Jasper",
+    "Manor Red",
+    "Headland",
+    "Cottage Green",
+    "Classic Cream",
+    "Paperbark",
+    "Surfmist",
+    "Evening Haze",
+    "Cove",
+    "Dune",
+    "Shale Grey",
+    "Windspray",
+    "Night Sky",
+    "Wallaby",
+    "Terrain",
+    "Gully",
+    "Mangrove",
+    "Dover White",
+    "Southerley",
+    "Bluegum"
+  ],
+  "pack_size": 1000,
+  "supplier": "Trifixx",
+  "notes": "Screws ordered from Trifixx in boxes of 1000"
+}

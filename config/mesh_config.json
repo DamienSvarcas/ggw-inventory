@@ -1,0 +1,60 @@
+{
+  "mesh_types": {
+    "4mm_aluminium": {
+      "name": "4mm Aluminium Mesh",
+      "widths": [250, 500, 750, 1000],
+      "lengths": [10, 30],
+      "lead_time_months": 4,
+      "weight_kg_per_metre": {
+        "250": 0.37,
+        "500": 0.50,
+        "750": 0.62,
+        "1000": 0.74
+      }
+    },
+    "2mm_ember_guard": {
+      "name": "2mm Ember Guard Mesh",
+      "widths": [250, 500, 750],
+      "lengths": [10, 20, 30],
+      "lead_time_months": 4,
+      "weight_kg_per_metre": {
+        "250": 0.40,
+        "500": 0.60,
+        "750": 0.80
+      }
+    }
+  },
+  "colours": [
+    "Monument",
+    "Woodland Grey",
+    "Basalt",
+    "Pale Eucalypt",
+    "Wilderness",
+    "Ironstone",
+    "Jasper",
+    "Manor Red",
+    "Headland",
+    "Cottage Green",
+    "Classic Cream",
+    "Paperbark",
+    "Surfmist",
+    "Evening Haze",
+    "Cove",
+    "Dune",
+    "Shale Grey",
+    "Windspray",
+    "Night Sky",
+    "Wallaby",
+    "Terrain",
+    "Gully",
+    "Mangrove",
+    "Dover White",
+    "Southerley",
+    "Bluegum"
+  ],
+  "reorder_thresholds": {
+    "min_months_stock": 4,
+    "alert_months_stock": 5,
+    "notes": "Mesh has 4-month lead time - alert when stock drops below 5 months"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "last_updated": "2026-01-11T09:35:27.774159Z",
+  "inventory": [
+    {
+      "id": "49319785",
+      "saddle_type": "corrugated",
+      "colour": "Monument",
+      "initial_weight_kg": 100.0,
+      "current_weight_kg": 50.0,
+      "estimated_yield": 4818,
+      "status": "in_use",
+      "supplier": "",
+      "received_date": "2026-01-11",
+      "notes": "",
+      "created_at": "2026-01-11T09:03:20.286589Z"
+    },
+    {
+      "id": "41d0194c",
+      "saddle_type": "trim",
+      "colour": "Monument",
+      "initial_weight_kg": 100.0,
+      "current_weight_kg": 100.0,
+      "estimated_yield": 840,
+      "status": "in_stock",
+      "supplier": "",
+      "received_date": "2026-01-11",
+      "notes": "",
+      "created_at": "2026-01-11T09:35:27.774127Z"
+    }
+  ],
+  "notes": "Raw steel coils for saddle production. Track by colour, weight (kg), and status."
+}

@@ -1,0 +1,19 @@
+{
+  "last_updated": null,
+  "mesh": {
+    "4mm_aluminium": {"price_per_metre": 0, "notes": ""},
+    "2mm_ember_guard": {"price_per_metre": 0, "notes": ""}
+  },
+  "screws": {"price_per_box": 0, "box_size": 1000},
+  "saddles": {
+    "corrugated": {"price_each": 0},
+    "trimdek": {"price_each": 0}
+  },
+  "trims": {"price_each": 0},
+  "boxes": {
+    "small_tube": {"price_each": 0},
+    "large_tube": {"price_each": 0},
+    "saddle_box": {"price_each": 0}
+  },
+  "coils": {"price_per_kg": 0}
+}

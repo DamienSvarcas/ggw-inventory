@@ -1,0 +1,66 @@
+{
+  "saddle_types": {
+    "corrugated": {
+      "name": "Corrugated Saddles",
+      "in_house": true,
+      "description": "Standard corrugated roof saddles",
+      "coil_width": "105mm",
+      "yield_per_kg": 66,
+      "waste_percent": 27,
+      "output_unit": "saddles"
+    },
+    "trim": {
+      "name": "Trim",
+      "in_house": true,
+      "description": "1m trim pieces",
+      "coil_width": "25mm",
+      "yield_per_kg": 8.4,
+      "waste_percent": 0,
+      "output_unit": "trims"
+    },
+    "trimdek": {
+      "name": "TrimDek Saddles",
+      "in_house": false,
+      "description": "Externally supplied - track as finished goods only"
+    }
+  },
+  "production": {
+    "yield_per_kg": 66,
+    "waste_percent": 27,
+    "coil_spec": "105mm wide x 0.55mm steel (saddles), 25mm wide (trims)",
+    "notes": "Saddles: 66/kg, 27% waste. Trims: 8.4/kg, 0% waste."
+  },
+  "suppliers": [
+    "Vulcan Steel",
+    "Colorbond Steel",
+    "BlueScope Steel"
+  ],
+  "colours": [
+    "Monument",
+    "Woodland Grey",
+    "Basalt",
+    "Pale Eucalypt",
+    "Wilderness",
+    "Ironstone",
+    "Jasper",
+    "Manor Red",
+    "Headland",
+    "Cottage Green",
+    "Classic Cream",
+    "Paperbark",
+    "Surfmist",
+    "Evening Haze",
+    "Cove",
+    "Dune",
+    "Shale Grey",
+    "Windspray",
+    "Night Sky",
+    "Wallaby",
+    "Terrain",
+    "Gully",
+    "Mangrove",
+    "Dover White",
+    "Southerley",
+    "Bluegum"
+  ]
+}
