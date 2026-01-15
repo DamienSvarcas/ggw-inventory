@@ -11,6 +11,9 @@ import json
 from datetime import datetime
 import uuid
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -24,6 +27,37 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+
+def get_app_password() -> str:
+    """Get app password from environment or Streamlit secrets."""
+    password = os.getenv("APP_PASSWORD", "")
+    if password:
+        return password
+    try:
+        return st.secrets.get("APP_PASSWORD", "")
+    except Exception:
+        return ""
+
+
+def check_password() -> bool:
+    """Check if user has entered correct password."""
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.title("🔐 GGW Inventory")
+    st.markdown("Please enter the password to access the dashboard.")
+
+    password = st.text_input("Password", type="password", key="password_input")
+
+    if st.button("Login", type="primary"):
+        if password == get_app_password():
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect password")
+
+    return False
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -63,6 +97,10 @@ mesh_manager, forecaster = get_managers()
 
 
 def main():
+    # Check password before showing anything
+    if not check_password():
+        return
+
     # Navigation header
     _, col_btn = st.columns([2, 1])
     with col_btn:
