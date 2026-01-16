@@ -379,6 +379,9 @@ def render_category_select_screen():
                 with st.spinner(f"Updating {cat_name} inventory..."):
                     result = apply_category_stocktake(cat_entries, cat)
 
+                # Clear cached managers so pages show fresh data from Google Sheets
+                st.cache_resource.clear()
+
                 st.session_state.pushed_categories.add(cat)
                 st.session_state.push_results[cat] = result
                 st.success(f"{cat_name} inventory updated!")
