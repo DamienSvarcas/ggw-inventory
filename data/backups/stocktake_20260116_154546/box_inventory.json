@@ -1,0 +1,31 @@
+{
+  "last_updated": "2026-01-13T03:50:31.562946Z",
+  "inventory": [
+    {
+      "id": "41462bb9",
+      "box_type": "small_tube",
+      "quantity": 500,
+      "source": "stocktake",
+      "created_at": "2026-01-13T03:50:31.562946Z",
+      "last_updated": "2026-01-13T03:50:31.562946Z"
+    },
+    {
+      "id": "4fdf2aa4",
+      "box_type": "large_tube",
+      "quantity": 200,
+      "source": "stocktake",
+      "created_at": "2026-01-13T03:50:31.562946Z",
+      "last_updated": "2026-01-13T03:50:31.562946Z"
+    },
+    {
+      "id": "e293e6d7",
+      "box_type": "saddle_box",
+      "quantity": 700,
+      "source": "stocktake",
+      "created_at": "2026-01-13T03:50:31.562946Z",
+      "last_updated": "2026-01-13T03:50:31.562946Z"
+    }
+  ],
+  "usage_history": [],
+  "notes": "Box inventory by type. Track packs received and usage for orders."
+}

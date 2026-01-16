@@ -1,0 +1,32 @@
+{
+  "last_updated": "2026-01-11T09:04:30.278437Z",
+  "inventory": [
+    {
+      "id": "5e6491c3",
+      "saddle_type": "corrugated",
+      "colour": "Monument",
+      "quantity": 2409,
+      "source": "production",
+      "created_at": "2026-01-11T09:04:30.277491Z",
+      "last_updated": "2026-01-11T09:04:30.277492Z"
+    }
+  ],
+  "production_history": [
+    {
+      "id": "ba7fdba0",
+      "date": "2026-01-11T09:04:30.277451Z",
+      "coil_id": "49319785",
+      "saddle_type": "corrugated",
+      "colour": "Monument",
+      "weight_used_kg": 50.0,
+      "usable_kg": 36.5,
+      "waste_kg": 13.5,
+      "expected_saddles": 2409,
+      "saddles_produced": 2409,
+      "operator": "",
+      "notes": ""
+    }
+  ],
+  "usage_history": [],
+  "notes": "Ready saddle stock by type and colour. Production history tracks coil-to-saddle conversion."
+}

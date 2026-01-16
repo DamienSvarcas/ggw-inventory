@@ -1,0 +1,25 @@
+{
+  "last_updated": "2026-01-11T10:08:57.428180Z",
+  "inventory": [
+    {
+      "id": "ff9d02e8",
+      "screw_type": "saddle",
+      "colour": "Monument",
+      "quantity": 5000,
+      "source": "received",
+      "created_at": "2026-01-11T10:08:10.799061Z",
+      "last_updated": "2026-01-11T10:08:10.799075Z"
+    },
+    {
+      "id": "8faa3a98",
+      "screw_type": "saddle",
+      "colour": "Woodland Grey",
+      "quantity": 3000,
+      "source": "received",
+      "created_at": "2026-01-11T10:08:57.428148Z",
+      "last_updated": "2026-01-11T10:08:57.428177Z"
+    }
+  ],
+  "usage_history": [],
+  "notes": "Screw inventory by type and colour. Track boxes received and usage for orders."
+}

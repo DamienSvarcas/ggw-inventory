@@ -37,9 +37,37 @@ class SaddleManager:
             return json.load(f)
 
     def _load_saddle_data(self) -> dict:
-        """Load saddle stock data."""
+        """Load saddle stock data, merging trims from Google Sheets if available."""
         with open(SADDLE_DATA_PATH, "r") as f:
-            return json.load(f)
+            data = json.load(f)
+
+        # Try to merge trims from Google Sheets
+        try:
+            from core.sheets_storage import is_sheets_enabled, read_trims
+            if is_sheets_enabled():
+                sheets_trims = read_trims()
+                if sheets_trims:
+                    # Remove existing trim entries from JSON data
+                    data["inventory"] = [
+                        entry for entry in data.get("inventory", [])
+                        if entry.get("saddle_type") != "trim"
+                    ]
+                    # Add trims from Google Sheets
+                    for trim in sheets_trims:
+                        data["inventory"].append({
+                            "id": trim.get("id", str(uuid.uuid4())[:8]),
+                            "saddle_type": "trim",
+                            "colour": trim.get("colour", "Unknown"),
+                            "quantity": int(trim.get("quantity", 0)),
+                            "source": trim.get("source", "stocktake"),
+                            "created_at": trim.get("created_at", ""),
+                            "last_updated": trim.get("last_updated", "")
+                        })
+        except Exception:
+            # If Google Sheets fails, just use JSON data
+            pass
+
+        return data
 
     def _save_coil_data(self):
         """Save coil inventory data."""
