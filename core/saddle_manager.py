@@ -63,9 +63,10 @@ class SaddleManager:
                             "created_at": trim.get("created_at", ""),
                             "last_updated": trim.get("last_updated", "")
                         })
-        except Exception:
-            # If Google Sheets fails, just use JSON data
-            pass
+        except Exception as e:
+            # Log the error for debugging, but continue with JSON data
+            import streamlit as st
+            st.sidebar.warning(f"Could not load trims from Sheets: {e}")
 
         return data
 
