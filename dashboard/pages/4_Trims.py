@@ -64,9 +64,12 @@ def main():
     with tab1:
         st.subheader("Current Trim Stock")
 
-        # Get stock filtered by type
-        all_stock = manager.get_stock_summary()
-        stock = [s for s in all_stock if s.get("saddle_type") == SADDLE_TYPE]
+        # Get stock from Google Sheets if available, otherwise from manager
+        if _sheets_enabled and _sheets_trims:
+            stock = _sheets_trims
+        else:
+            all_stock = manager.get_stock_summary()
+            stock = [s for s in all_stock if s.get("saddle_type") == SADDLE_TYPE]
 
         # Filter
         filter_colour = st.selectbox(
