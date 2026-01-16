@@ -44,11 +44,8 @@ class SaddleManager:
         # Try to merge trims from Google Sheets
         try:
             from core.sheets_storage import is_sheets_enabled, read_trims
-            import streamlit as st
-            sheets_enabled = is_sheets_enabled()
-            if sheets_enabled:
+            if is_sheets_enabled():
                 sheets_trims = read_trims()
-                st.sidebar.info(f"Sheets enabled, trims found: {len(sheets_trims)}")
                 if sheets_trims:
                     # Remove existing trim entries from JSON data
                     data["inventory"] = [
@@ -66,10 +63,9 @@ class SaddleManager:
                             "created_at": trim.get("created_at", ""),
                             "last_updated": trim.get("last_updated", "")
                         })
-        except Exception as e:
-            # Log the error for debugging, but continue with JSON data
-            import streamlit as st
-            st.sidebar.warning(f"Could not load trims from Sheets: {e}")
+        except Exception:
+            # If Google Sheets fails, just use JSON data
+            pass
 
         return data
 
