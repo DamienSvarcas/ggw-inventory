@@ -15,6 +15,15 @@ from core.box_manager import BoxManager
 
 st.set_page_config(page_title="Boxes", page_icon="📦", layout="wide")
 
+# Load boxes from Google Sheets if available
+try:
+    from core.sheets_storage import is_sheets_enabled, read_boxes
+    _sheets_enabled = is_sheets_enabled()
+    _sheets_boxes = read_boxes() if _sheets_enabled else []
+except Exception:
+    _sheets_enabled = False
+    _sheets_boxes = []
+
 # Initialize manager
 @st.cache_resource
 def get_manager():
@@ -51,7 +60,23 @@ def main():
     with tab1:
         st.subheader("Box Stock Levels")
 
-        stock = manager.get_stock_summary()
+        # Get stock from Google Sheets if available, otherwise from manager
+        if _sheets_enabled and _sheets_boxes:
+            # Convert sheets data to stock summary format
+            stock = []
+            for item in _sheets_boxes:
+                box_config = box_types.get(item.get("box_type", ""), {})
+                pack_size = box_config.get("pack_size", 1)
+                qty = int(item.get("quantity", 0))
+                if qty > 0:
+                    stock.append({
+                        "box_type": item.get("box_type", ""),
+                        "quantity": qty,
+                        "packs": qty // pack_size,
+                        "loose": qty % pack_size
+                    })
+        else:
+            stock = manager.get_stock_summary()
 
         if stock:
             table_data = []
