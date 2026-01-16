@@ -26,10 +26,27 @@ manager = get_manager()
 SADDLE_TYPE = "trim"
 TYPE_NAME = "Trims"
 
+# DEBUG: Test Google Sheets directly
+try:
+    from core.sheets_storage import is_sheets_enabled, read_trims
+    _sheets_enabled = is_sheets_enabled()
+    _sheets_trims = read_trims() if _sheets_enabled else []
+except Exception as e:
+    _sheets_enabled = False
+    _sheets_trims = []
+    st.sidebar.error(f"Sheets error: {e}")
+
 
 def main():
     st.title("📏 Trim Stock")
     st.caption("1m trim pieces by colour")
+
+    # DEBUG: Show sheets info
+    st.sidebar.markdown("---")
+    st.sidebar.write(f"**Sheets enabled:** {_sheets_enabled}")
+    st.sidebar.write(f"**Trims in Sheets:** {len(_sheets_trims)}")
+    if _sheets_trims:
+        st.sidebar.write(_sheets_trims[:3])
 
     # Refresh button
     if st.sidebar.button("🔄 Refresh"):
