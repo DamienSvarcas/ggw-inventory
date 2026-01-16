@@ -1,7 +1,9 @@
 """
-Inventory Updater
-Writes stocktake results to the inventory JSON files.
+Stocktake Updater
+Writes stocktake results to the inventory JSON files AND Google Sheets.
 Preserves incoming_orders and production_history.
+
+Storage: Uses Google Sheets on cloud for persistence, JSON as backup.
 """
 
 import json
@@ -13,7 +15,22 @@ from typing import Dict, Any, List
 
 # Path to data files
 DATA_DIR = Path(__file__).parent.parent / "data"
-BACKUP_DIR = Path(__file__).parent / "backups"
+BACKUP_DIR = DATA_DIR / "backups"
+
+# Import sheets storage (optional - for cloud persistence)
+try:
+    from .sheets_storage import (
+        is_sheets_enabled, write_screws, write_trims,
+        write_saddles, write_boxes, write_mesh
+    )
+    SHEETS_AVAILABLE = True
+except ImportError:
+    SHEETS_AVAILABLE = False
+
+
+def use_google_sheets() -> bool:
+    """Check if Google Sheets should be used for storage."""
+    return SHEETS_AVAILABLE and is_sheets_enabled()
 
 
 def generate_id() -> str:
@@ -69,6 +86,8 @@ def update_screw_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Update screw inventory from stocktake entries.
     Screws category - one per colour, boxes of 1000.
+
+    Writes to Google Sheets (if configured) AND JSON file.
     """
     existing = load_data_file("screw_inventory.json")
 
@@ -98,13 +117,20 @@ def update_screw_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
         "notes": existing.get("notes", "Screw inventory by colour.")
     }
 
+    # Save to JSON file (always, as backup)
     save_data_file("screw_inventory.json", updated)
+
+    # Also save to Google Sheets if configured
+    sheets_saved = False
+    if use_google_sheets():
+        sheets_saved = write_screws(new_inventory, append=False)
 
     return {
         "file": "screw_inventory.json",
         "category": "screws",
         "items_added": len(new_inventory),
-        "previous_items": len(existing.get("inventory", []))
+        "previous_items": len(existing.get("inventory", [])),
+        "sheets_saved": sheets_saved
     }
 
 
@@ -112,6 +138,8 @@ def update_trim_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Update trim inventory from stocktake entries.
     Trims - one per colour.
+
+    Writes to Google Sheets (if configured) AND JSON file.
     """
     existing = load_data_file("trim_inventory.json")
 
@@ -139,13 +167,20 @@ def update_trim_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
         "notes": existing.get("notes", "Trim inventory by colour.")
     }
 
+    # Save to JSON file (always, as backup)
     save_data_file("trim_inventory.json", updated)
+
+    # Also save to Google Sheets if configured
+    sheets_saved = False
+    if use_google_sheets():
+        sheets_saved = write_trims(new_inventory, append=False)
 
     return {
         "file": "trim_inventory.json",
         "category": "trims",
         "items_added": len(new_inventory),
-        "previous_items": len(existing.get("inventory", []))
+        "previous_items": len(existing.get("inventory", [])),
+        "sheets_saved": sheets_saved
     }
 
 
@@ -153,6 +188,8 @@ def update_saddle_inventory(entries: List[Dict[str, Any]], saddle_type: str) -> 
     """
     Update saddle inventory from stocktake entries for a specific saddle type.
     Preserves production_history and entries of other saddle type.
+
+    Writes to Google Sheets (if configured) AND JSON file.
 
     Args:
         entries: List of saddle entries
@@ -201,7 +238,13 @@ def update_saddle_inventory(entries: List[Dict[str, Any]], saddle_type: str) -> 
         "notes": existing.get("notes", "Ready saddle stock by type and colour.")
     }
 
+    # Save to JSON file (always, as backup)
     save_data_file("saddle_stock.json", updated)
+
+    # Also save to Google Sheets if configured
+    sheets_saved = False
+    if use_google_sheets():
+        sheets_saved = write_saddles(combined_inventory, append=False)
 
     return {
         "file": "saddle_stock.json",
@@ -212,7 +255,8 @@ def update_saddle_inventory(entries: List[Dict[str, Any]], saddle_type: str) -> 
             i for i in existing.get("inventory", [])
             if i.get("saddle_type") == saddle_type
         ]),
-        "production_history_preserved": len(existing.get("production_history", []))
+        "production_history_preserved": len(existing.get("production_history", [])),
+        "sheets_saved": sheets_saved
     }
 
 
@@ -220,6 +264,8 @@ def update_box_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Update box inventory from stocktake entries.
     3 box types.
+
+    Writes to Google Sheets (if configured) AND JSON file.
     """
     existing = load_data_file("box_inventory.json")
 
@@ -246,13 +292,20 @@ def update_box_inventory(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
         "notes": existing.get("notes", "Box inventory by type.")
     }
 
+    # Save to JSON file (always, as backup)
     save_data_file("box_inventory.json", updated)
+
+    # Also save to Google Sheets if configured
+    sheets_saved = False
+    if use_google_sheets():
+        sheets_saved = write_boxes(new_inventory, append=False)
 
     return {
         "file": "box_inventory.json",
         "category": "boxes",
         "items_added": len(new_inventory),
-        "previous_items": len(existing.get("inventory", []))
+        "previous_items": len(existing.get("inventory", [])),
+        "sheets_saved": sheets_saved
     }
 
 
@@ -261,6 +314,8 @@ def update_mesh_inventory(entries: List[Dict[str, Any]], mesh_category: str) -> 
     Update mesh roll inventory from stocktake entries for a specific mesh type.
     PRESERVES incoming_orders (4-month turnaround items).
     Preserves entries of other mesh type.
+
+    Writes to Google Sheets (if configured) AND JSON file.
 
     Args:
         entries: List of mesh entries
@@ -313,7 +368,13 @@ def update_mesh_inventory(entries: List[Dict[str, Any]], mesh_category: str) -> 
         "notes": existing.get("notes", "Mesh roll inventory.")
     }
 
+    # Save to JSON file (always, as backup)
     save_data_file("mesh_rolls.json", updated)
+
+    # Also save to Google Sheets if configured
+    sheets_saved = False
+    if use_google_sheets():
+        sheets_saved = write_mesh(combined_inventory, append=False)
 
     return {
         "file": "mesh_rolls.json",
@@ -324,7 +385,8 @@ def update_mesh_inventory(entries: List[Dict[str, Any]], mesh_category: str) -> 
             i for i in existing.get("inventory", [])
             if i.get("mesh_type") == mesh_type
         ]),
-        "incoming_orders_preserved": len(existing.get("incoming_orders", []))
+        "incoming_orders_preserved": len(existing.get("incoming_orders", [])),
+        "sheets_saved": sheets_saved
     }
 
 

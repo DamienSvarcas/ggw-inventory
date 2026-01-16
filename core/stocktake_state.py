@@ -1,5 +1,5 @@
 """
-Wizard State Manager
+Stocktake State Manager
 Handles session state, progress tracking, and auto-save functionality.
 """
 
@@ -8,11 +8,12 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 
-# Path for saving progress
-PROGRESS_FILE = Path(__file__).parent / "stocktake_progress.json"
+# Path for saving progress (in data/ directory)
+DATA_DIR = Path(__file__).parent.parent / "data"
+PROGRESS_FILE = DATA_DIR / "stocktake_progress.json"
 
 
-class WizardState:
+class StocktakeState:
     """Manages the state of the stocktake wizard."""
 
     def __init__(self):
@@ -130,7 +131,7 @@ class WizardState:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "WizardState":
+    def from_dict(cls, data: Dict[str, Any]) -> "StocktakeState":
         """Create state from saved dictionary."""
         state = cls()
         state.items = data.get("items", [])
@@ -153,7 +154,7 @@ class WizardState:
             return False
 
     @classmethod
-    def load_progress(cls) -> Optional["WizardState"]:
+    def load_progress(cls) -> Optional["StocktakeState"]:
         """Load progress from file if it exists."""
         if not PROGRESS_FILE.exists():
             return None

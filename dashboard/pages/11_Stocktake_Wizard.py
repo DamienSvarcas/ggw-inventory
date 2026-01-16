@@ -11,9 +11,9 @@ import os
 # Add parent directories to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from stocktake_wizard.item_generator import generate_all_items, get_category_counts, CATEGORY_NAMES
-from stocktake_wizard.wizard_state import WizardState
-from stocktake_wizard.inventory_updater import apply_category_stocktake
+from core.stocktake_items import generate_all_items, get_category_counts, CATEGORY_NAMES
+from core.stocktake_state import StocktakeState
+from core.stocktake_updater import apply_category_stocktake
 
 # Custom CSS for clean appearance
 st.markdown("""
@@ -142,7 +142,7 @@ def render_welcome_screen():
     st.markdown("---")
 
     # Check for saved progress
-    saved_info = WizardState.get_saved_progress_info()
+    saved_info = StocktakeState.get_saved_progress_info()
     if saved_info:
         st.warning("**Saved progress found!**")
         st.markdown(f"""
@@ -154,13 +154,13 @@ def render_welcome_screen():
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Resume Stocktake", type="primary", use_container_width=True):
-                st.session_state.wizard_state = WizardState.load_progress()
+                st.session_state.wizard_state = StocktakeState.load_progress()
                 st.session_state.selected_categories = saved_info['categories']
                 st.session_state.screen = 'category_select'
                 st.rerun()
         with col2:
             if st.button("Start Fresh", use_container_width=True):
-                WizardState.clear_progress()
+                StocktakeState.clear_progress()
                 st.session_state.completed_categories = set()
                 st.session_state.pushed_categories = set()
                 st.session_state.screen = 'categories'
@@ -257,7 +257,7 @@ def render_category_selection():
         # User confirmed - proceed with stocktake
         categories_to_use = st.session_state.pending_categories
         items = generate_all_items(categories_to_use)
-        state = WizardState()
+        state = StocktakeState()
         state.initialize(items, categories_to_use)
         st.session_state.wizard_state = state
         st.session_state.selected_categories = categories_to_use
@@ -285,7 +285,7 @@ def render_category_select_screen():
     st.title("Select Category")
     st.markdown("Choose a category to count or update.")
 
-    state: WizardState = st.session_state.wizard_state
+    state: StocktakeState = st.session_state.wizard_state
 
     if not state:
         st.session_state.screen = 'welcome'
@@ -397,7 +397,7 @@ def render_category_select_screen():
         st.balloons()
 
         if st.button("Start New Stocktake", type="primary", use_container_width=True):
-            WizardState.clear_progress()
+            StocktakeState.clear_progress()
             st.session_state.wizard_state = None
             st.session_state.screen = 'welcome'
             st.session_state.completed_categories = set()
@@ -414,7 +414,7 @@ def render_category_select_screen():
 
 def render_entry_screen():
     """Render the item entry screen."""
-    state: WizardState = st.session_state.wizard_state
+    state: StocktakeState = st.session_state.wizard_state
     current_cat = st.session_state.current_category
 
     if not state or not current_cat:
@@ -670,7 +670,7 @@ def render_entry_screen():
             st.success("Progress saved!")
 
 
-def check_category_complete(state: WizardState, category: str, cat_items: list):
+def check_category_complete(state: StocktakeState, category: str, cat_items: list):
     """Check if a category is complete and trigger auto-push."""
     completed = all(state.get_quantity(item['id']) is not None for item in cat_items)
 

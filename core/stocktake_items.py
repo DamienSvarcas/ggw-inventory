@@ -1,5 +1,5 @@
 """
-Item Generator for Stocktake Wizard
+Stocktake Item Generator
 Generates the full list of items to count from config files.
 """
 

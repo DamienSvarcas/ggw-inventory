@@ -3,6 +3,8 @@ Screw Inventory Manager
 
 Tracks screw stock by type (saddle, trim, mesh/tile) AND colour.
 Simple add/remove stock management.
+
+Storage: Uses Google Sheets on cloud, falls back to JSON locally.
 """
 
 import json
@@ -16,12 +18,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(BASE_DIR, "config", "screw_config.json")
 DATA_PATH = os.path.join(BASE_DIR, "data", "screw_inventory.json")
 
+# Import sheets storage (optional - for cloud persistence)
+try:
+    from core.sheets_storage import is_sheets_enabled, read_screws, write_screws
+    SHEETS_AVAILABLE = True
+except ImportError:
+    SHEETS_AVAILABLE = False
+
 
 class ScrewManager:
     """Manages screw inventory by type and colour."""
 
     def __init__(self):
         self.config = self._load_config()
+        self.use_sheets = SHEETS_AVAILABLE and is_sheets_enabled()
         self.data = self._load_data()
 
     def _load_config(self) -> dict:
@@ -30,15 +40,36 @@ class ScrewManager:
             return json.load(f)
 
     def _load_data(self) -> dict:
-        """Load screw inventory data."""
-        with open(DATA_PATH, "r") as f:
-            return json.load(f)
+        """Load screw inventory data from Google Sheets or JSON."""
+        if self.use_sheets:
+            # Load from Google Sheets
+            inventory = read_screws()
+            return {
+                "last_updated": datetime.utcnow().isoformat() + "Z",
+                "inventory": inventory,
+                "usage_history": [],
+                "notes": "Screw inventory by colour."
+            }
+        else:
+            # Fall back to JSON file
+            with open(DATA_PATH, "r") as f:
+                return json.load(f)
 
     def _save_data(self):
-        """Save screw inventory data."""
+        """Save screw inventory data to Google Sheets and/or JSON."""
         self.data["last_updated"] = datetime.utcnow().isoformat() + "Z"
+
+        if self.use_sheets:
+            # Save to Google Sheets
+            write_screws(self.data["inventory"], append=False)
+
+        # Always save to JSON as backup/local copy
         with open(DATA_PATH, "w") as f:
             json.dump(self.data, f, indent=2)
+
+    def reload_data(self):
+        """Force reload data from storage (useful after stocktake)."""
+        self.data = self._load_data()
 
     # -------------------------
     # Stock Management

@@ -11,6 +11,10 @@ python-dotenv>=1.0.0       # For environment variable loading
 # Data handling (included in Python stdlib)
 # json, datetime, uuid, os, sys - no external deps needed
 
+# Google Sheets integration (persistent cloud storage)
+gspread>=6.0.0             # Google Sheets API client
+google-auth>=2.0.0         # Google authentication
+
 # Future enhancements (uncomment when needed):
 # plotly>=5.0.0          # For interactive charts
 # requests>=2.31.0       # For Shopify API integration
