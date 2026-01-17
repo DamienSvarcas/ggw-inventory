@@ -17,5 +17,12 @@
     }
   },
   "supplier": "Wendy (Box Supplier)",
-  "notes": "Boxes ordered from Wendy in packs"
+  "notes": "Boxes ordered from Wendy in packs",
+  "reorder_thresholds": {
+    "default_months_stock": 6,
+    "min_months_stock": 4,
+    "alert_months_stock": 5,
+    "lead_time_weeks": 1,
+    "notes": "6 months base stock. 1 week lead time from supplier."
+  }
 }

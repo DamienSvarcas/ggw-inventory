@@ -36,5 +36,12 @@
   ],
   "pack_size": 1000,
   "supplier": "Trifixx",
-  "notes": "Screws ordered from Trifixx in boxes of 1000"
+  "notes": "Screws ordered from Trifixx in boxes of 1000",
+  "reorder_thresholds": {
+    "default_months_stock": 6,
+    "min_months_stock": 4,
+    "alert_months_stock": 5,
+    "lead_time_weeks": 2,
+    "notes": "6 months base stock. 1-2 week lead time from Trifixx."
+  }
 }

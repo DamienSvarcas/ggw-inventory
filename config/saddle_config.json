@@ -62,5 +62,12 @@
     "Dover White",
     "Southerley",
     "Bluegum"
-  ]
+  ],
+  "reorder_thresholds": {
+    "default_months_stock": 6,
+    "min_months_stock": 4,
+    "alert_months_stock": 5,
+    "lead_time_days": 2,
+    "notes": "6 months base stock. Saddles and trims made in-house (1-2 day turnaround from coil)."
+  }
 }

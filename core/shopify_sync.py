@@ -11,9 +11,21 @@ import time
 from datetime import datetime, timedelta
 from typing import Optional
 
-# Shopify API Configuration (loaded from environment)
-STORE = os.getenv("SHOPIFY_STORE", "")
-TOKEN = os.getenv("SHOPIFY_TOKEN", "")
+# Shopify API Configuration (Streamlit secrets with env var fallback)
+def _get_shopify_credentials():
+    """Get Shopify credentials from Streamlit secrets or environment variables."""
+    try:
+        import streamlit as st
+        store = st.secrets.get("shopify", {}).get("store", "")
+        token = st.secrets.get("shopify", {}).get("token", "")
+        if store and token:
+            return store, token
+    except Exception:
+        pass
+    # Fallback to environment variables
+    return os.getenv("SHOPIFY_STORE", ""), os.getenv("SHOPIFY_TOKEN", "")
+
+STORE, TOKEN = _get_shopify_credentials()
 API_VERSION = "2024-01"
 ENDPOINT = f"https://{STORE}/admin/api/{API_VERSION}/graphql.json"
 
@@ -25,11 +37,7 @@ HEADERS = {
 # Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(BASE_DIR, "data", "shopify_orders_cache.json")
-KIT_BREAKDOWN_PATH = os.path.join(
-    os.path.dirname(BASE_DIR),
-    "Shipping Label Automation",
-    "kit-component-breakdown.json"
-)
+KIT_BREAKDOWN_PATH = os.path.join(BASE_DIR, "config", "kit-component-breakdown.json")
 
 
 class ShopifySync:

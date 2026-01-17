@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from core.forecasting import Forecaster
 from core.mesh_manager import MeshManager
+from core.shopify_sync import ShopifySync
 
 st.set_page_config(page_title="Forecasting", page_icon="📈", layout="wide")
 
@@ -33,7 +34,54 @@ def main():
         st.cache_resource.clear()
         st.rerun()
 
-    # Shopify sync status
+    # -------------------------
+    # Shopify Sync Section (Prominent)
+    # -------------------------
+    st.markdown("### 🛒 Shopify Order Sync")
+    st.caption("Sync orders from Shopify to calculate component usage and forecasts")
+
+    sync_col1, sync_col2, sync_col3 = st.columns([2, 1, 1])
+
+    with sync_col1:
+        months_to_fetch = st.selectbox(
+            "Order History Period",
+            options=[6, 9, 12],
+            index=0,
+            format_func=lambda x: f"{x} months",
+            key="sync_months"
+        )
+
+    with sync_col2:
+        if st.button("🔄 Sync Orders Now", type="primary", key="sync_btn"):
+            with st.spinner(f"Fetching {months_to_fetch} months of orders from Shopify..."):
+                try:
+                    sync = ShopifySync()
+                    usage = sync.calculate_component_usage(days=months_to_fetch * 30)
+                    if usage.get("order_count", 0) > 0:
+                        st.success(f"✅ Synced {usage['order_count']:,} orders!")
+                    else:
+                        st.warning("No orders found. Check Shopify credentials in Settings → Secrets.")
+                    st.cache_resource.clear()
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Sync failed: {e}")
+
+    with sync_col3:
+        # Show current sync status
+        try:
+            usage = forecaster.get_shopify_usage()
+            order_count = usage.get("order_count", 0)
+            if order_count > 0:
+                st.success(f"✅ {order_count:,} orders")
+                st.caption(f"{usage.get('period_days', 0)} days")
+            else:
+                st.warning("Not synced")
+        except Exception:
+            st.error("Error")
+
+    st.divider()
+
+    # Shopify sync status (sidebar - keep for reference)
     st.sidebar.markdown("---")
     st.sidebar.markdown("### Shopify Data")
     try:
@@ -48,12 +96,13 @@ def main():
         st.sidebar.error("Sync error")
 
     # Tabs
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📦 Mesh Forecast",
         "🔩 Component Forecast",
+        "📊 6-Month Projection",
         "📉 Usage Trends",
         "📋 Reorder Suggestions",
-        "📊 Shopify Usage"
+        "🛒 Shopify Usage"
     ])
 
     # -------------------------
@@ -235,9 +284,148 @@ def main():
             st.info("No box stock data. Add boxes on the Boxes page.")
 
     # -------------------------
-    # TAB 3: Usage Trends
+    # TAB 3: 6-Month Projection
     # -------------------------
     with tab3:
+        st.subheader("📊 6-Month Stock Projection")
+        st.caption("Compare current stock levels against 6-month usage forecast based on Shopify orders")
+
+        usage = forecaster.get_shopify_usage()
+        order_count = usage.get("order_count", 0)
+
+        if order_count == 0:
+            st.warning(
+                "⚠️ **No Shopify data available.** Click 'Sync Orders Now' above to fetch order history.\n\n"
+                "This projection requires Shopify order data to calculate usage rates."
+            )
+        else:
+            st.info(f"📦 Based on {order_count:,} orders over {usage.get('period_days', 0)} days")
+
+            # Get all forecasts
+            component_forecast = forecaster.get_component_forecast()
+            daily_avg = usage.get("daily_avg", {})
+
+            # Calculate 6-month projections
+            projection_months = 6
+            projection_days = projection_months * 30
+
+            # Summary metrics
+            st.markdown("### Overall Status")
+            col1, col2, col3, col4 = st.columns(4)
+
+            # Count items by status
+            all_forecasts = []
+            all_forecasts.extend(component_forecast.get("saddles", []))
+            all_forecasts.extend(component_forecast.get("screws", []))
+            all_forecasts.extend(component_forecast.get("trims", []))
+            all_forecasts.extend(component_forecast.get("boxes", []))
+
+            critical = len([f for f in all_forecasts if f.get("status") == "CRITICAL"])
+            order_now = len([f for f in all_forecasts if f.get("status") == "ORDER_NOW"])
+            low = len([f for f in all_forecasts if f.get("status") == "LOW"])
+            ok = len([f for f in all_forecasts if f.get("status") == "OK"])
+
+            with col1:
+                st.metric("🔴 Critical", critical)
+            with col2:
+                st.metric("🟠 Order Now", order_now)
+            with col3:
+                st.metric("🟡 Low", low)
+            with col4:
+                st.metric("✅ OK", ok)
+
+            st.divider()
+
+            # Detailed projection table
+            st.markdown("### Component Stock vs 6-Month Forecast")
+
+            projection_data = []
+
+            # Saddles
+            for f in component_forecast.get("saddles", []):
+                if f.get("type") == "coil_yield":
+                    continue  # Skip coil yield entries
+                daily = f.get("daily_usage", 0)
+                current = f.get("current_qty", 0)
+                six_month_need = daily * projection_days
+                surplus_deficit = current - six_month_need
+
+                projection_data.append({
+                    "Category": "Saddles",
+                    "Item": f"{f.get('saddle_type', '').replace('_', ' ').title()} ({f.get('colour', '')})",
+                    "Current Stock": f"{current:,}",
+                    "Daily Usage": f"{daily:.1f}",
+                    "6-Month Need": f"{six_month_need:,.0f}",
+                    "Surplus/Deficit": f"{surplus_deficit:+,.0f}",
+                    "Days Left": f"{f.get('days_remaining', '∞'):.0f}" if f.get('days_remaining') else "∞",
+                    "Status": f"{_get_status_emoji(f.get('status', ''))} {f.get('status', '')}"
+                })
+
+            # Screws
+            for f in component_forecast.get("screws", []):
+                daily = f.get("daily_usage", 0)
+                current = f.get("current_qty", 0)
+                six_month_need = daily * projection_days
+                surplus_deficit = current - six_month_need
+
+                projection_data.append({
+                    "Category": "Screws",
+                    "Item": f"{f.get('screw_name', f.get('screw_type', ''))} ({f.get('colour', '')})",
+                    "Current Stock": f"{current:,}",
+                    "Daily Usage": f"{daily:.1f}",
+                    "6-Month Need": f"{six_month_need:,.0f}",
+                    "Surplus/Deficit": f"{surplus_deficit:+,.0f}",
+                    "Days Left": f"{f.get('days_remaining', '∞'):.0f}" if f.get('days_remaining') else "∞",
+                    "Status": f"{_get_status_emoji(f.get('status', ''))} {f.get('status', '')}"
+                })
+
+            # Trims
+            for f in component_forecast.get("trims", []):
+                if f.get("type") == "coil_yield":
+                    continue
+                daily = f.get("daily_usage", 0)
+                current = f.get("current_qty", 0)
+                six_month_need = daily * projection_days
+                surplus_deficit = current - six_month_need
+
+                projection_data.append({
+                    "Category": "Trims",
+                    "Item": f"Trims ({f.get('colour', '')})",
+                    "Current Stock": f"{current:,}",
+                    "Daily Usage": f"{daily:.1f}",
+                    "6-Month Need": f"{six_month_need:,.0f}",
+                    "Surplus/Deficit": f"{surplus_deficit:+,.0f}",
+                    "Days Left": f"{f.get('days_remaining', '∞'):.0f}" if f.get('days_remaining') else "∞",
+                    "Status": f"{_get_status_emoji(f.get('status', ''))} {f.get('status', '')}"
+                })
+
+            # Boxes
+            for f in component_forecast.get("boxes", []):
+                daily = f.get("daily_usage", 0)
+                current = f.get("current_qty", 0)
+                six_month_need = daily * projection_days
+                surplus_deficit = current - six_month_need
+
+                projection_data.append({
+                    "Category": "Boxes",
+                    "Item": f.get("box_name", f.get("box_type", "")),
+                    "Current Stock": f"{current:,}",
+                    "Daily Usage": f"{daily:.1f}",
+                    "6-Month Need": f"{six_month_need:,.0f}",
+                    "Surplus/Deficit": f"{surplus_deficit:+,.0f}",
+                    "Days Left": f"{f.get('days_remaining', '∞'):.0f}" if f.get('days_remaining') else "∞",
+                    "Status": f"{_get_status_emoji(f.get('status', ''))} {f.get('status', '')}"
+                })
+
+            if projection_data:
+                st.dataframe(projection_data, use_container_width=True, hide_index=True)
+            else:
+                st.info("No component data available. Make sure you have stock recorded in each category.")
+
+    # -------------------------
+    # TAB 4: Usage Trends
+    # -------------------------
+    with tab4:
         st.subheader("Usage Trends")
 
         col1, col2 = st.columns([1, 3])
@@ -289,9 +477,9 @@ def main():
             st.info("No usage data yet.")
 
     # -------------------------
-    # TAB 4: Reorder Suggestions
+    # TAB 5: Reorder Suggestions
     # -------------------------
-    with tab4:
+    with tab5:
         st.subheader("📋 Reorder Suggestions")
         st.info(
             "Suggestions are based on maintaining stock for **lead time + 2 months buffer**. "
@@ -328,9 +516,9 @@ def main():
             st.success("✅ All items have sufficient stock!")
 
     # -------------------------
-    # TAB 5: Shopify Usage Summary
+    # TAB 6: Shopify Usage Summary
     # -------------------------
-    with tab5:
+    with tab6:
         st.subheader("📊 Shopify Usage Summary")
         st.caption("Component usage calculated from shipped orders")
 

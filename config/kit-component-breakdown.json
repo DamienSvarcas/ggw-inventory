@@ -1,0 +1,329 @@
+{
+  "extraction_info": {
+    "source": "https://www.gutterguarddirect.com.au",
+    "extracted_at": "2026-01-01",
+    "total_products": 20,
+    "notes": "Component quantities verified at 10m baseline. Scaling patterns calculated from 10m to 20m increments."
+  },
+  "component_patterns": {
+    "standard_gutter_metal": {
+      "description": "Corrugated, Trimdek, Klip-Lok roof types",
+      "per_10m": {
+        "mesh": {"length_m": 10, "width_mm": 250},
+        "saddles": 65,
+        "saddle_screws": 70,
+        "trims": 10,
+        "trim_screws": 50
+      },
+      "scaling_per_10m": {
+        "mesh": "+10m",
+        "saddles": "+65",
+        "saddle_screws": "+70",
+        "trims": "+10",
+        "trim_screws": "+50"
+      }
+    },
+    "standard_gutter_tile": {
+      "description": "Tiled roof type - no saddles needed",
+      "per_10m": {
+        "mesh": {"length_m": 10, "width_mm": 500},
+        "mesh_screws": 5,
+        "trims": 10,
+        "trim_screws": 50
+      },
+      "scaling_per_10m": {
+        "mesh": "+10m",
+        "mesh_screws": "+5",
+        "trims": "+10",
+        "trim_screws": "+50"
+      }
+    },
+    "valley_metal": {
+      "description": "Valley installations for metal roofs - 3x saddles, no trims",
+      "per_10m": {
+        "mesh": {"length_m": 10, "width_mm": 250},
+        "saddles": 195,
+        "saddle_screws": 210
+      },
+      "scaling_per_10m": {
+        "mesh": "+10m",
+        "saddles": "+195",
+        "saddle_screws": "+210"
+      }
+    },
+    "box_gutter_metal": {
+      "description": "Box gutter installations - wider mesh",
+      "per_10m": {
+        "mesh": {"length_m": 10, "width_mm": 500},
+        "saddles": 65,
+        "saddle_screws": 70,
+        "trims": 10,
+        "trim_screws": 50
+      },
+      "trim_options": ["90º Trims", "Flat/Open Trims"]
+    }
+  },
+  "products": [
+    {
+      "category": "Standard Gutter Kit",
+      "product_name": "Corrugated - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 130, "saddle_screws": 140, "trims": 20, "trim_screws": 100}},
+        {"size": "30m", "components": {"mesh": {"width_mm": 250, "length_m": 30}, "saddles": 195, "saddle_screws": 210, "trims": 30, "trim_screws": 150}},
+        {"size": "40m", "components": {"mesh": {"width_mm": 250, "length_m": 40}, "saddles": 260, "saddle_screws": 280, "trims": 40, "trim_screws": 200}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 325, "saddle_screws": 350, "trims": 50, "trim_screws": 250}},
+        {"size": "100m", "components": {"mesh": {"width_mm": 250, "length_m": 100}, "saddles": 650, "saddle_screws": 700, "trims": 100, "trim_screws": 500}}
+      ],
+      "scaling_pattern": "Per 10m: +65 saddles, +70 saddle screws, +10 trims, +50 trim screws",
+      "source_url": "https://www.gutterguarddirect.com.au/products/corrugated-roof-diy-gutter-guard-kit-1"
+    },
+    {
+      "category": "Standard Gutter Kit",
+      "product_name": "Tiled - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Tile",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "mesh_screws": 5, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 500, "length_m": 20}, "mesh_screws": 10, "trims": 20, "trim_screws": 100}},
+        {"size": "30m", "components": {"mesh": {"width_mm": 500, "length_m": 30}, "mesh_screws": 15, "trims": 30, "trim_screws": 150}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 500, "length_m": 50}, "mesh_screws": 25, "trims": 50, "trim_screws": 250}},
+        {"size": "100m", "components": {"mesh": {"width_mm": 500, "length_m": 100}, "mesh_screws": 50, "trims": 100, "trim_screws": 500}}
+      ],
+      "scaling_pattern": "Per 10m: +5 mesh screws, +10 trims, +50 trim screws (NO SADDLES)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/tiled-roof-diy-gutter-guard-kit-1"
+    },
+    {
+      "category": "Standard Gutter Kit",
+      "product_name": "Trimdek - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Trimdek",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 130, "saddle_screws": 140, "trims": 20, "trim_screws": 100}},
+        {"size": "30m", "components": {"mesh": {"width_mm": 250, "length_m": 30}, "saddles": 195, "saddle_screws": 210, "trims": 30, "trim_screws": 150}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 325, "saddle_screws": 350, "trims": 50, "trim_screws": 250}}
+      ],
+      "scaling_pattern": "Per 10m: +65 saddles, +70 saddle screws, +10 trims, +50 trim screws",
+      "source_url": "https://www.gutterguarddirect.com.au/products/trimdek-roof-diy-gutter-guard-kit-1",
+      "note": "Uses Trimdek-specific saddles"
+    },
+    {
+      "category": "Standard Gutter Kit",
+      "product_name": "Klip-Lok - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Klip-Lok",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 130, "saddle_screws": 140, "trims": 20, "trim_screws": 100}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 325, "saddle_screws": 350, "trims": 50, "trim_screws": 250}}
+      ],
+      "scaling_pattern": "Per 10m: +65 saddles, +70 saddle screws, +10 trims, +50 trim screws",
+      "source_url": "https://www.gutterguarddirect.com.au/products/klip-lok-3-5mm-aluminium-gutter-guard-kit",
+      "note": "Uses Klip-Lok-specific saddles"
+    },
+    {
+      "category": "Valley Kit",
+      "product_name": "Corrugated Valley - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 195, "saddle_screws": 210}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 390, "saddle_screws": 420}},
+        {"size": "30m", "components": {"mesh": {"width_mm": 250, "length_m": 30}, "saddles": 585, "saddle_screws": 630}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 975, "saddle_screws": 1050}}
+      ],
+      "scaling_pattern": "Per 10m: +195 saddles, +210 saddle screws (NO TRIMS - valley installation)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/corrugated-iron-valley-diy-gutter-guard-kit-with-saddles"
+    },
+    {
+      "category": "Valley Kit",
+      "product_name": "Tiled Valley - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Tile",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "mesh_screws": 15}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 500, "length_m": 20}, "mesh_screws": 30}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 500, "length_m": 50}, "mesh_screws": 75}}
+      ],
+      "scaling_pattern": "Per 10m: +15 mesh screws (NO SADDLES, NO TRIMS)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/tiled-roof-valley-diy-gutter-guard-kit-1",
+      "note": "Tile valley - mesh screws scaled 3x vs regular tile kit"
+    },
+    {
+      "category": "Valley Kit",
+      "product_name": "Trimdek Valley - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Trimdek",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 195, "saddle_screws": 210}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 390, "saddle_screws": 420}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 975, "saddle_screws": 1050}}
+      ],
+      "scaling_pattern": "Per 10m: +195 saddles, +210 saddle screws (NO TRIMS)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/trimdek-valley-3-5mm-aluminium-gutter-guard-kit"
+    },
+    {
+      "category": "Box Gutter Kit",
+      "product_name": "Corrugated Box Gutter - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 500, "length_m": 20}, "saddles": 130, "saddle_screws": 140, "trims": 20, "trim_screws": 100}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 500, "length_m": 50}, "saddles": 325, "saddle_screws": 350, "trims": 50, "trim_screws": 250}}
+      ],
+      "trim_options": ["90º Trims", "Flat/Open Trims"],
+      "scaling_pattern": "Per 10m: +65 saddles, +70 saddle screws, +10 trims, +50 trim screws",
+      "source_url": "https://www.gutterguarddirect.com.au/products/corrugated-iron-roof-box-gutter-guard-kit"
+    },
+    {
+      "category": "Box Gutter Kit",
+      "product_name": "Trimdek Box Gutter - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Trimdek",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "trim_options": ["90º Trims", "Flat/Open Trims"],
+      "source_url": "https://www.gutterguarddirect.com.au/products/trimdek-iron-roof-box-gutter-guard-diy-kit"
+    },
+    {
+      "category": "Box Gutter Kit",
+      "product_name": "Klip-Lok Box Gutter - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Klip-Lok",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "trim_options": ["90º Trims", "Flat/Open Trims"],
+      "source_url": "https://www.gutterguarddirect.com.au/products/klip-lok-box-gutter-3-5mm-aluminium-gutter-guard-kit"
+    },
+    {
+      "category": "Box Gutter Kit",
+      "product_name": "Tiled Box Gutter - 3.5mm Aluminium - Gutter Guard Kit",
+      "roof_type": "Tile",
+      "mesh_type": "3.5mm Aluminium",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "mesh_screws": 5, "trims": 10, "trim_screws": 50}}
+      ],
+      "trim_options": ["90º Trims", "Flat/Open Trims"],
+      "source_url": "https://www.gutterguarddirect.com.au/products/tiled-box-gutter-3-5mm-aluminium-gutter-guard-kit"
+    },
+    {
+      "category": "Ember Guard Kit",
+      "product_name": "Corrugated - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 250, "length_m": 20}, "saddles": 130, "saddle_screws": 140, "trims": 20, "trim_screws": 100}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 250, "length_m": 50}, "saddles": 325, "saddle_screws": 350, "trims": 50, "trim_screws": 250}},
+        {"size": "100m", "components": {"mesh": {"width_mm": 250, "length_m": 100}, "saddles": 650, "saddle_screws": 700, "trims": 100, "trim_screws": 500}}
+      ],
+      "scaling_pattern": "Per 10m: +65 saddles, +70 saddle screws, +10 trims, +50 trim screws",
+      "source_url": "https://www.gutterguarddirect.com.au/products/2mm-ember-guard-corrugated-iron-custom-orb-roof-kit",
+      "note": "BAL-rated ember protection mesh"
+    },
+    {
+      "category": "Ember Guard Kit",
+      "product_name": "Tiled - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Tile",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "mesh_screws": 5, "trims": 10, "trim_screws": 50}},
+        {"size": "20m", "components": {"mesh": {"width_mm": 500, "length_m": 20}, "mesh_screws": 10, "trims": 20, "trim_screws": 100}},
+        {"size": "50m", "components": {"mesh": {"width_mm": 500, "length_m": 50}, "mesh_screws": 25, "trims": 50, "trim_screws": 250}}
+      ],
+      "scaling_pattern": "Per 10m: +5 mesh screws, +10 trims, +50 trim screws (NO SADDLES)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/2mm-ember-guard-tiled-roof-gutter-guard-kit-1"
+    },
+    {
+      "category": "Ember Guard Kit",
+      "product_name": "Trimdek - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Trimdek",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/2mm-ember-guard-trimdek-gutter-guard-kit-1"
+    },
+    {
+      "category": "Ember Guard Kit",
+      "product_name": "Klip-Lok - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Klip-Lok",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/klip-lok-2mm-aluminium-ember-guard-kit"
+    },
+    {
+      "category": "Ember Guard Valley Kit",
+      "product_name": "Corrugated Valley - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 195, "saddle_screws": 210}}
+      ],
+      "scaling_pattern": "Per 10m: +195 saddles, +210 saddle screws (NO TRIMS)",
+      "source_url": "https://www.gutterguarddirect.com.au/products/2mm-ember-guard-corrugated-iron-custom-orb-valley-kit"
+    },
+    {
+      "category": "Ember Guard Valley Kit",
+      "product_name": "Tiled Valley - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Tile",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "mesh_screws": 15}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/2mm-ember-guard-tiled-roof-valley-gutter-guard-kit"
+    },
+    {
+      "category": "Ember Guard Valley Kit",
+      "product_name": "Trimdek Valley - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Trimdek",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 250, "length_m": 10}, "saddles": 195, "saddle_screws": 210}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/trimdek-valley-2mm-aluminium-ember-guard-kit"
+    },
+    {
+      "category": "Ember Guard Box Gutter Kit",
+      "product_name": "Corrugated Box Gutter - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Corrugated",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/corrugated-box-gutter-2mm-aluminium-ember-guard-kit"
+    },
+    {
+      "category": "Ember Guard Box Gutter Kit",
+      "product_name": "Klip-Lok Box Gutter - 2mm Aluminium - Ember Guard Kit",
+      "roof_type": "Klip-Lok",
+      "mesh_type": "2mm Aluminium Ember Guard",
+      "variants": [
+        {"size": "10m", "components": {"mesh": {"width_mm": 500, "length_m": 10}, "saddles": 65, "saddle_screws": 70, "trims": 10, "trim_screws": 50}}
+      ],
+      "source_url": "https://www.gutterguarddirect.com.au/products/klip-lok-box-gutter-2mm-aluminium-ember-guard-kit"
+    }
+  ],
+  "manual_verification_flags": [
+    {
+      "product": "Trimdek Valley - 2mm Ember Guard",
+      "reason": "Only 10m variant data extracted - verify larger sizes if available"
+    },
+    {
+      "product": "Klip-Lok kits",
+      "reason": "Saddle type uses Klip-Lok specific clips - verify compatibility"
+    },
+    {
+      "product": "All ember guard kits",
+      "reason": "2mm mesh may have different screw requirements - verify with supplier"
+    }
+  ]
+}
