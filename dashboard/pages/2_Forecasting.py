@@ -53,18 +53,28 @@ def main():
 
     with sync_col2:
         if st.button("🔄 Sync Orders Now", type="primary", key="sync_btn"):
-            with st.spinner(f"Fetching {months_to_fetch} months of orders from Shopify..."):
-                try:
-                    sync = ShopifySync()
-                    usage = sync.calculate_component_usage(days=months_to_fetch * 30)
-                    if usage.get("order_count", 0) > 0:
-                        st.success(f"✅ Synced {usage['order_count']:,} orders!")
-                    else:
-                        st.warning("No orders found. Check Shopify credentials in Settings → Secrets.")
-                    st.cache_resource.clear()
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Sync failed: {e}")
+            progress_placeholder = st.empty()
+
+            def update_progress(msg):
+                progress_placeholder.text(f"📡 {msg}")
+
+            try:
+                sync = ShopifySync()
+                usage = sync.calculate_component_usage(
+                    days=months_to_fetch * 30,
+                    force_refresh=True,
+                    progress_callback=update_progress
+                )
+                progress_placeholder.empty()
+                if usage.get("order_count", 0) > 0:
+                    st.success(f"✅ Synced {usage['order_count']:,} orders!")
+                else:
+                    st.warning("No orders found. Check Shopify credentials in Settings → Secrets.")
+                st.cache_resource.clear()
+                st.rerun()
+            except Exception as e:
+                progress_placeholder.empty()
+                st.error(f"Sync failed: {e}")
 
     with sync_col3:
         # Show current sync status
@@ -567,14 +577,24 @@ def main():
 
             # Force refresh button
             if st.button("🔄 Refresh Shopify Data"):
+                refresh_progress = st.empty()
+
+                def refresh_update(msg):
+                    refresh_progress.text(f"📡 {msg}")
+
                 try:
-                    from core.shopify_sync import ShopifySync
                     sync = ShopifySync()
-                    new_usage = sync.calculate_component_usage(days=180)
+                    new_usage = sync.calculate_component_usage(
+                        days=180,
+                        force_refresh=True,
+                        progress_callback=refresh_update
+                    )
+                    refresh_progress.empty()
                     st.success(f"Refreshed! Analyzed {new_usage.get('order_count', 0):,} orders.")
                     st.cache_resource.clear()
                     st.rerun()
                 except Exception as e:
+                    refresh_progress.empty()
                     st.error(f"Error: {e}")
         else:
             st.warning(

@@ -71,16 +71,16 @@ class ShopifySync:
     def fetch_orders(
         self,
         days: int = 180,
-        max_orders: int = 500,
-        force_refresh: bool = False
+        force_refresh: bool = False,
+        progress_callback=None
     ) -> list:
         """
         Fetch orders from Shopify.
 
         Args:
             days: Number of days to fetch (default 180 = 6 months)
-            max_orders: Maximum number of orders to fetch
             force_refresh: If True, ignore cache and fetch fresh data
+            progress_callback: Optional callback for progress updates
 
         Returns:
             List of order dictionaries with line items
@@ -100,7 +100,10 @@ class ShopifySync:
         cursor = None
         page = 1
 
-        while len(all_orders) < max_orders:
+        while True:
+            if progress_callback:
+                progress_callback(f"Fetching page {page}... ({len(all_orders)} orders so far)")
+
             result = self._fetch_orders_page(cursor, since_date)
 
             if "errors" in result:
@@ -116,7 +119,7 @@ class ShopifySync:
                 all_orders.append(order)
 
             page_info = orders_data.get("pageInfo", {})
-            if not page_info.get("hasNextPage") or len(all_orders) >= max_orders:
+            if not page_info.get("hasNextPage"):
                 break
 
             cursor = page_info.get("endCursor")
@@ -195,13 +198,15 @@ class ShopifySync:
 
         return order
 
-    def calculate_component_usage(self, days: int = 180) -> dict:
+    def calculate_component_usage(self, days: int = 180, force_refresh: bool = False,
+                                    progress_callback=None) -> dict:
         """
         Calculate total component usage from orders.
 
         Returns dict with usage for each component type.
         """
-        orders = self.fetch_orders(days=days)
+        orders = self.fetch_orders(days=days, force_refresh=force_refresh,
+                                   progress_callback=progress_callback)
 
         usage = {
             "mesh": [],  # List of {mesh_type, width_mm, length_m, quantity}
